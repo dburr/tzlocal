@@ -7,18 +7,20 @@ _cache_tz = None
 
 
 def _get_localzone():
-    pipe = subprocess.Popen(
-        "systemsetup -gettimezone",
-        shell=True,
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    tzname = pipe.stdout.read().replace('Time Zone: ', '').strip()
+    # pipe = subprocess.Popen(
+    #     "systemsetup -gettimezone",
+    #     shell=True,
+    #     stderr=subprocess.PIPE,
+    #     stdout=subprocess.PIPE
+    # )
+    # tzname = pipe.stdout.read().replace('Time Zone: ', '').strip()
 
-    if not tzname or tzname not in pytz.all_timezones_set:
+    # if not tzname or tzname not in pytz.all_timezones_set:
         # link will be something like /usr/share/zoneinfo/America/Los_Angeles.
-        link = os.readlink("/etc/localtime")
-        tzname = link[link.rfind("zoneinfo/") + 9:]
+        
+    # BRUTAL HACK because the above doesn't seem to work on El Capitan any more
+    link = os.readlink("/etc/localtime")
+    tzname = link[link.rfind("zoneinfo/") + 9:]
     return pytz.timezone(tzname)
 
 
